@@ -5,8 +5,10 @@ plugins {
 }
 
 group = 'org.comroid'
-version = '0.0.1-SNAPSHOT'
+version = '0.1.0-SNAPSHOT'
 sourceCompatibility = '17'
+
+apply from: 'gradle/vars.gradle'
 
 configurations {
 	compileOnly {
@@ -18,15 +20,57 @@ repositories {
 	mavenCentral()
 }
 
+task sourcesJar(type: Jar) {
+	from sourceSets.main.allJava
+
+	try {
+		archiveClassifier.set 'sources'
+	} catch (MissingPropertyException ignored) {
+		classifier = "sources"
+	}
+}
+
+task javadocJar(type: Jar) {
+	dependsOn 'javadoc'
+
+	from javadoc.destinationDir
+
+	try {
+		archiveClassifier.set 'javadoc'
+	} catch (MissingPropertyException ignored) {
+		classifier = "javadoc"
+	}
+}
+
+tasks.withType(Jar).configureEach {
+	it.duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
 dependencies {
-	implementation 'com.github.ilpersi:pushover-client:1.1.1'
+	if (findProject(':api') != null)
+		api project(':api')
+	else api 'org.comroid:api:1.0'
+
+	// rest
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	// pushover
+	//implementation 'com.github.ilpersi:pushover-client:1.1.1'
+
+	// config
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+	// util
 	compileOnly 'org.projectlombok:lombok'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	// spring test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+apply from: 'gradle/publishing.gradle'
