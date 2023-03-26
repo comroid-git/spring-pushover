@@ -17,6 +17,7 @@ configurations {
 }
 
 repositories {
+	maven { url = 'https://maven.comroid.org' }
 	mavenCentral()
 }
 
