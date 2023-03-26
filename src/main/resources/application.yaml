@@ -1,8 +1,0 @@
-pushover:
-  apiToken: <YOUR PUSHOVER API TOKEN>
-  userId: <YOUR PUSHOVER ID>
-  priority: HIGH
-  title: Message
-  url: https://ksbrwsk.de
-  titleForUrl: Kai Saborowski
-  sound: magic

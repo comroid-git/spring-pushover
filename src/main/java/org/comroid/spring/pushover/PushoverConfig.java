@@ -20,12 +20,6 @@ public class PushoverConfig {
     @Nullable
     private String title;
 
-    @Order
-    @Bean(name = "pushover")
-    public PushoverService createPushoverService() {
-        return new PushoverService(this);
-    }
-
     PushoverMessage createMessage(String message) {
         return new PushoverMessage(token, user, device, title, message);
     }
