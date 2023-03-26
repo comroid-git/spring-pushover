@@ -9,6 +9,12 @@ plugins {
 ext {
 	buildId = TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis())
 }
+task tcBuildId {
+	doLast {
+		println "##teamcity[buildNumber '$buildId']"
+	}
+}
+tasks.named('jar').configure { dependsOn tcBuildId }
 
 group = 'org.comroid'
 version = '0.1' + '.' + buildId
